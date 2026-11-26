@@ -1,47 +1,15 @@
-# Sample testbench for a Tiny Tapeout project
+# The cocotb Test of the Chip
 
-This is a sample testbench for a Tiny Tapeout project. It uses [cocotb](https://docs.cocotb.org/en/stable/) to drive the DUT and check the outputs.
-See below to get started or for more information, check the [website](https://tinytapeout.com/hdl/testing/).
+This is the test of the Tiny Tapeout template, written for Almurut II. [test.py](test.py) has a small model of the bridge, serves a program of six instructions, and checks the reset, STOP, the program, the interrupt line, and the debug port. [tb.v](tb.v) holds the chip and makes its pins wires for the test, and [Makefile](Makefile) builds it with the source files that [info.yaml](../info.yaml) lists. The platform, [asc2-project](https://github.com/toksaitov/asc2-project), has the same test in SystemVerilog and a suite that runs whole programs and the kernel on the simulated chip.
 
-## Setting up
-
-1. Edit [Makefile](Makefile) and modify `PROJECT_SOURCES` to point to your Verilog files.
-2. Edit [tb.v](tb.v) and replace `tt_um_example` with your module name.
-
-## How to run
-
-To run the RTL simulation:
-
-```sh
-make -B
+```bash
+make
 ```
 
-To run gatelevel simulation, first harden your project and copy `../runs/wokwi/results/final/verilog/gl/{your_module_name}.v` to `gate_level_netlist.v`.
+This runs the test on the hardware description and prints `TESTS=1 PASS=1 FAIL=0`. Icarus Verilog cannot read the SystemVerilog of the chip, so `sv2v` turns the files of [src/](../src) into one file of Verilog first. It needs cocotb 2.1 ([requirements.txt](requirements.txt)), Icarus Verilog 13, and `sv2v`.
 
-Then run:
-
-```sh
-make -B GATES=yes
+```bash
+make GATES=yes PDK_ROOT=...
 ```
 
-If you wish to save the waveform in VCD format instead of FST format, edit tb.v to use `$dumpfile("tb.vcd");` and then run:
-
-```sh
-make -B FST=
-```
-
-This will generate `tb.vcd` instead of `tb.fst`.
-
-## How to view the waveform file
-
-Using GTKWave
-
-```sh
-gtkwave tb.fst tb.gtkw
-```
-
-Using Surfer
-
-```sh
-surfer tb.fst
-```
+This runs it on the gates, from `gate_level_netlist.v`, which the gds workflow ([gds.yaml](../.github/workflows/gds.yaml)) copies from its layout run, with the cell models of the PDK under `PDK_ROOT`. The test workflow ([test.yaml](../.github/workflows/test.yaml)) runs the first command on every push, and the gds workflow the second.

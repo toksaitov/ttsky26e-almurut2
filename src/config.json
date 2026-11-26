@@ -13,14 +13,30 @@
 
   "//": "PL_TARGET_DENSITY_PCT - You can increase this if Global Placement fails with error GPL-0302.",
   "//": "Users have reported that values up to 80 worked well for them.",
-  "PL_TARGET_DENSITY_PCT": 60,
+  "VERILOG_DEFINES": ["ASC_SKY130"],
+
+  "//": "CTS_APPLY_NDR - Almurut II: the wires of the clock keep the spacing of all other wires. The wider spacing that the",
+  "//": "default gives them costs room for wires that the design needs on 16 tiles.",
+  "CTS_APPLY_NDR": "none",
+
+  "//": "PL_TARGET_DENSITY_PCT - Almurut II: a denser placement has shorter wires. At 70 the placer spread the cells apart",
+  "//": "and the routing failed; at 73 it routed.",
+  "PL_TARGET_DENSITY_PCT": 73,
 
   "//": "CLOCK_PERIOD - Increase this in case you are getting setup time violations.",
   "//": "The value is in nanoseconds, so 20ns == 50MHz.",
+  "//": "Almurut II: the 20 ns of the template. The longest path takes 14 ns in the typical corner and 26 ns in the",
+  "//": "slowest one, so the slowest corner misses this period. A longer period makes the paths",
+  "//": "slower and the chip no smaller. The RP2040 gives the clock: 12.5 MHz on the bench, a period of 80 ns.",
   "CLOCK_PERIOD": 20,
 
+  "//": "SIGNOFF_SDC_FILE - Almurut II: the last timing report uses the 80 ns of the chip; the layout steps do not read it.",
+  "SIGNOFF_SDC_FILE": "dir::signoff.sdc",
+
   "//": "Hold slack margin - Increase them in case you are getting hold violations.",
-  "PL_RESIZER_HOLD_SLACK_MARGIN": 0.1,
+  "//": "Almurut II: 0.15, as with 0.1 a path from the gated clock of the instruction cache to the clock of the rest missed",
+  "//": "the hold time of the fastest corner by 10 ps in a layout of the array with two rows of cells.",
+  "PL_RESIZER_HOLD_SLACK_MARGIN": 0.15,
   "GRT_RESIZER_HOLD_SLACK_MARGIN": 0.05,
 
   "//": "RUN_LINTER, LINTER_INCLUDE_PDK_MODELS - Disabling the linter is not recommended!",
@@ -30,6 +46,9 @@
   "//": "If you need a custom clock configuration, read the following documentation first:",
   "//": "https://tinytapeout.com/faq/#how-can-i-map-an-additional-external-clock-to-one-of-the-gpios",
   "CLOCK_PORT": "clk",
+
+  "//": "DRT_ANTENNA_REPAIR_ITERS - Almurut II: more rounds than the default of 3, which left one wire too long",
+  "DRT_ANTENNA_REPAIR_ITERS": 6,
 
   "//": "Configuration docs: https://librelane.readthedocs.io/en/latest/reference/configuration.html",
 

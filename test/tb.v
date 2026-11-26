@@ -1,8 +1,8 @@
 `default_nettype none
 `timescale 1ns / 1ps
 
-/* This testbench just instantiates the module and makes some convenient wires
-   that can be driven / tested by the cocotb test.py.
+/* The wrapper of the chip for the cocotb test in test.py: it holds the chip
+   and makes its pins wires that the test drives and reads.
 */
 module tb ();
 
@@ -27,8 +27,8 @@ module tb ();
   wire VGND = 1'b0;
 `endif
 
-  // Replace tt_um_example with your module name:
-  tt_um_example user_project (
+  // The chip
+  tt_um_toksaitov_almurut2 user_project (
 
       // Include power ports for the Gate Level test:
 `ifdef GL_TEST

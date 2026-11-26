@@ -1,13 +1,12 @@
 .DS_Store
-.idea
-*.vcd
+# What the Tiny Tapeout tools and the cocotb test leave in the project
+/tt/
+/runs/
+/tt_submission/
+/src/user_config.json
+/src/config_merged.json
+/test/sim_build/
+/test/results.xml
+/test/gate_level_netlist.v
 *.fst
 *.fst.hier
-runs
-tt_submission
-src/user_config.json
-src/config_merged.json
-test/sim_build
-test/__pycache__/
-test/results.xml
-test/gate_level_netlist.v

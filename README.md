@@ -1,42 +1,25 @@
 ![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg) ![](../../workflows/fpga/badge.svg)
 
-# Tiny Tapeout Verilog Project Template
+# Almurut II
 
-- [Read the documentation for project](docs/info.md)
+Almurut II is a 32-bit teaching computer with its own instruction set and an AI accelerator, made to teach computer organization, compilers, and operating systems. This repository is its chip for the Tiny Tapeout shuttle TTSKY26e: 16 tiles (8x2) of the SKY130 process, clocked at 12.5 MHz. The page of the chip in the datasheet, [docs/info.md](docs/info.md), tells how it works and how to test it.
 
-## What is Tiny Tapeout?
+The chip holds the CPU with an instruction cache, the AI accelerator, an interrupt controller, a timer, and a keyboard controller. The accelerator keeps twelve weights and twelve inputs on the chip and computes a layer of a small neural network, or a step of its training, in one instruction. A microcontroller beside the chip, the RP2350B of the Tiny Tapeout demo board, is its bridge to memory, storage, and various peripherals, over a narrow bus of the chip's own design, so the same chip can use any screen, disk, or device that the bridge supports.
 
-Tiny Tapeout is an educational project that aims to make it easier and cheaper than ever to get your digital and analog designs manufactured on a real chip.
+## The Platform
 
-To learn more and get started, visit https://tinytapeout.com.
+The software and tools of Almurut II are in its platform repository, [asc2-project](https://github.com/toksaitov/asc2-project): an emulator, an assembler, a C compiler, the kernel Rach2 with its shell, utilities, and showcase programs, the firmware of the bridge for the demo board and for the bench, a version of the chip for the DE10-Lite FPGA board, and the tests. Its Readme tells how to build each part and how to run the whole computer on the demo board, with a tour of the AI accelerator, 3D graphics, and games.
 
-## Set up your Verilog project
+## Layout
 
-1. Add your Verilog files to the `src` folder.
-2. Edit the [info.yaml](info.yaml) and update information about your project, paying special attention to the `source_files` and `top_module` properties. If you are upgrading an existing Tiny Tapeout project, check out our [online info.yaml migration tool](https://tinytapeout.github.io/tt-yaml-upgrade-tool/).
-3. Edit [docs/info.md](docs/info.md) and add a description of your project.
-4. Adapt the testbench to your design. See [test/README.md](test/README.md) for more information.
+* [info.yaml](info.yaml): the project for Tiny Tapeout: the size in tiles, the clock, the top module, the source files, and the names of the pins.
+* [src/](src): the hardware description in SystemVerilog, with the top module in [src/tt_um_toksaitov_almurut2.sv](src/tt_um_toksaitov_almurut2.sv), and the settings of the layout in [src/config.json](src/config.json) and [src/signoff.sdc](src/signoff.sdc).
+* [docs/info.md](docs/info.md): the page of the chip in the datasheet.
+* [test/](test): the cocotb test, with a small model of the bridge; [test/README.md](test/README.md) tells how to run it.
+* [.github/workflows/](.github/workflows): the workflows of the Tiny Tapeout template: the layout with its precheck and the test on the gates ([gds.yaml](.github/workflows/gds.yaml)), the test ([test.yaml](.github/workflows/test.yaml)), the datasheet page ([docs.yaml](.github/workflows/docs.yaml)), and the FPGA build ([fpga.yaml](.github/workflows/fpga.yaml)).
 
-The GitHub action will automatically build the ASIC files using [LibreLane](https://www.zerotoasiccourse.com/terminology/librelane/).
+## License
 
-## Enable GitHub actions to build the results page
+Copyright 2026 Dmitrii Toksaitov
 
-- [Enabling GitHub Pages](https://tinytapeout.com/faq/#my-github-action-is-failing-on-the-pages-part)
-
-## Resources
-
-- [FAQ](https://tinytapeout.com/faq/)
-- [Digital design lessons](https://tinytapeout.com/digital_design/)
-- [Learn how semiconductors work](https://tinytapeout.com/siliwiz/)
-- [Join the community](https://tinytapeout.com/discord)
-- [Build your design locally](https://www.tinytapeout.com/guides/local-hardening/)
-
-## What next?
-
-- [Submit your design to the next shuttle](https://app.tinytapeout.com/).
-- Edit [this README](README.md) and explain your design, how it works, and how to test it.
-- Share your project on your social network of choice:
-  - LinkedIn [#tinytapeout](https://www.linkedin.com/search/results/content/?keywords=%23tinytapeout) [@TinyTapeout](https://www.linkedin.com/company/100708654/)
-  - Mastodon [#tinytapeout](https://chaos.social/tags/tinytapeout) [@matthewvenn](https://chaos.social/@matthewvenn)
-  - X (formerly Twitter) [#tinytapeout](https://twitter.com/hashtag/tinytapeout) [@tinytapeout](https://twitter.com/tinytapeout)
-  - Bluesky [@tinytapeout.com](https://bsky.app/profile/tinytapeout.com)
+Licensed under the [Apache License, Version 2.0](LICENSE).

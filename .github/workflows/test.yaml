@@ -9,9 +9,21 @@ jobs:
         with:
           submodules: recursive
 
+      # The test on the gates (in gds.yaml) uses this build of Icarus Verilog
       - name: Install iverilog
         shell: bash
-        run: sudo apt-get update && sudo apt-get install -y iverilog
+        run: |
+          wget -q https://github.com/TinyTapeout/iverilog/releases/download/v13.0/iverilog_13.0-1_amd64.deb
+          sudo apt-get update -y
+          sudo apt-get install -y ./iverilog_13.0-1_amd64.deb
+
+      # Icarus Verilog cannot read the SystemVerilog of the chip; sv2v turns it into Verilog
+      - name: Install sv2v
+        shell: bash
+        run: |
+          wget -q https://github.com/zachjs/sv2v/releases/download/v0.0.13/sv2v-Linux.zip
+          unzip -q sv2v-Linux.zip
+          sudo install sv2v-Linux/sv2v /usr/local/bin/sv2v
 
       # Set Python up and install cocotb
       - name: Setup python
